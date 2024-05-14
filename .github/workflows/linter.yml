@@ -3,12 +3,6 @@ name: flake8 Lint
 on:
   push:
     branches: [ main ]
-    paths:
-      - src/**
-  pull_request:
-    branches: [ main ]
-    paths:
-      - src/**
 
 jobs:
   flake8-lint:
