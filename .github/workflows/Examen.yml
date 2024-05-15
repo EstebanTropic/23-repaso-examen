@@ -72,5 +72,5 @@ jobs:
         uses: johnlokerse/website-healthcheck@v2
         with:
           web-url: "http://${{ secrets.AWS_HOSTNAME }}:8000"
-  #         scan-for-text: "Hello from Flask App"
+          scan-for-text: "Hello"
 
