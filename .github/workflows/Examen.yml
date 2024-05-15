@@ -1,10 +1,10 @@
-name: DevOps
+name: Examen
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - src/**
+  # push:
+  #   branches: [ main ]
+  #   paths:
+  #     - src/**
   pull_request:
     branches: [ main ]
     paths:
@@ -44,23 +44,23 @@ jobs:
           push: true 
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/repaso:latest
 
-  # aws:
-  #   name: Deploy image to aws
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #   - name: multiple command
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.AWS_HOSTNAME }}
-  #       username: ${{ secrets.AWS_USERNAME }}
-  #       key: ${{ secrets.AWS_PRIVATEKEY }}
-  #       port: 22  # ${{ secrets.PORT }}
-  #       script: |
-  #           sleep 60
-  #           docker stop web && docker rm web
-  #           docker rmi tropic71/galeria
-  #           docker run -d -p 80:5000 --name web tropic71/galeria:latest
+  aws:
+    name: Deploy image to aws
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: multiple command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AWS_HOSTNAME }}
+        username: ${{ secrets.AWS_USERNAME }}
+        key: ${{ secrets.AWS_PRIVATEKEY }}
+        port: 22  # ${{ secrets.PORT }}
+        script: |
+            sleep 40
+            docker stop web && docker rm web
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/repaso
+            docker run -d -p 80:8000 --name web ${{ secrets.DOCKERHUB_USERNAME }}/repaso:latest
 
   # check:  
   #   name: checkfor status 200
@@ -71,6 +71,6 @@ jobs:
   #     - id: text
   #       uses: johnlokerse/website-healthcheck@v2
   #       with:
-  #         web-url: "http://${{ secrets.AWS_HOSTNAME }}"
+  #         web-url: "http://${{ secrets.AWS_HOSTNAME }}:8000"
   #         scan-for-text: "Hello from Flask App"
 
